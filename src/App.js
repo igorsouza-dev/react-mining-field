@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import params from './params';
+import Field from './components/Field';
 
 export default function App() {
   return (
@@ -8,7 +9,8 @@ export default function App() {
       <Text style={styles.welcome}>Starting the game!</Text>
       <Text style={styles.instructions}>
         Grid size: {params.getRowsAmount()} X {params.getColumnsAmount()}
-        </Text>
+      </Text>
+      <Field />
     </View>
   );
 }
@@ -25,6 +27,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   instructions: {
-
+    fontWeight: 'bold'
   }
 });
