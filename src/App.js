@@ -12,6 +12,7 @@ export default function App() {
       </Text>
       <Field />
       <Field opened/>
+    
       <Field opened nearMines={1}/>
       <Field opened nearMines={2}/>
       <Field opened nearMines={3}/>
@@ -19,6 +20,9 @@ export default function App() {
       <Field opened nearMines={5}/>
       <Field opened nearMines={6}/>
       <Field opened nearMines={7}/>
+      <Field mined/>
+      <Field mined opened/>
+      <Field mined opened exploded/>
     </View>
   );
 }
