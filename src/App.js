@@ -1,32 +1,39 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import params from './params';
-import Field from './components/Field';
+import MineField from './components/MineField';
+import { createMinedBoard } from './functions';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.welcome}>Starting the game!</Text>
-      <Text style={styles.instructions}>
-        Grid size: {params.getRowsAmount()} X {params.getColumnsAmount()}
-      </Text>
-      <Field />
-      <Field opened/>
-    
-      <Field opened nearMines={1}/>
-      <Field opened nearMines={2}/>
-      <Field opened nearMines={3}/>
-      <Field opened nearMines={4}/>
-      <Field opened nearMines={5}/>
-      <Field opened nearMines={6}/>
-      <Field opened nearMines={7}/>
-      <Field mined/>
-      <Field mined opened/>
-      <Field mined opened exploded/>
-      <Field flagged/>
-      <Field flagged opened/>
-    </View>
-  );
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = this.createState();
+  }
+  getMinesAmount = () => {
+    const rows = params.getRowsAmount();
+    const columns = params.getColumnsAmount();
+    const minesAmount = Math.ceil(rows * columns * params.difficultLevel);
+    // return createMinedBoard(rows, columns, minesAmount);
+    return minesAmount;
+  }
+  createState = () => {
+    const rows = params.getRowsAmount();
+    const columns = params.getColumnsAmount();
+    return {
+      board: createMinedBoard(rows, columns, this.getMinesAmount())
+    }
+  }
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.welcome}>Welcome to the game!</Text>
+        <Text style={styles.instructions}>Touch the squares to uncover mines. Long touch to flag the square.</Text>
+        <View style={styles.board}>
+          <MineField board={this.state.board}/>
+        </View>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -42,5 +49,8 @@ const styles = StyleSheet.create({
   },
   instructions: {
     fontWeight: 'bold'
+  },
+  board: {
+    
   }
 });
