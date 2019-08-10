@@ -82,4 +82,22 @@ const openField = (board, row, column) => {
     }
 }
 
-export { createMinedBoard };
+const fields = board => [].concat(... board);
+
+const hasExploded = board => fields(board).filter(field => field.exploded).length > 0;
+
+const isFieldIntact = field => (field.mined && !field.flagged) || (!field.mined && !field.opened);
+
+const isGameWon = board => fields(board).filter(isFieldIntact).length === 0;
+
+const showMines = board => fields(board).filter(field => field.mined).forEach(field => field.opened = true);
+
+
+export { 
+    createMinedBoard,
+    cloneBoard,
+    openField,
+    hasExploed,
+    isGameWon,
+    showMines
+};
