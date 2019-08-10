@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Alert } from 'react-native';
 import params from './params';
 import MineField from './components/MineField';
-import { createMinedBoard } from './functions';
+import { 
+  createMinedBoard,
+  cloneBoard,
+  openField,
+  hasExploded,
+  isGameWon,
+  showMines,
+  toggleFlag
+} from './functions';
 
 export default class App extends Component {
   constructor(props) {
@@ -20,8 +28,38 @@ export default class App extends Component {
     const rows = params.getRowsAmount();
     const columns = params.getColumnsAmount();
     return {
-      board: createMinedBoard(rows, columns, this.getMinesAmount())
+      board: createMinedBoard(rows, columns, this.getMinesAmount()),
+      gameWon: false,
+      gameLost: false
     }
+  }
+  onOpenField = (row, column) => {
+    const board = cloneBoard(this.state.board);
+    openField(board, row, column);
+    const gameLost = hasExploded(board);
+    const gameWon = isGameWon(board);
+
+    if (gameLost) {
+      showMines(board);
+      Alert.alert('Game Over!', 'You lost!')
+    }
+    if (gameWon) {
+      Alert.alert('Congratulations!', 'You won!');
+    }
+
+    this.setState({ board, gameWon, gameLost });
+  }
+  onFlag = (row, column) => {
+    const board = cloneBoard(this.state.board);
+    toggleFlag(board, row, column);
+
+    const gameWon = isGameWon(board);
+    
+    if (gameWon) {
+      Alert.alert('Congratulations!', 'You won!');
+    }
+
+    this.setState({ board, gameWon });
   }
   render() {
     return (
@@ -29,7 +67,7 @@ export default class App extends Component {
         <Text style={styles.welcome}>Welcome to the game!</Text>
         <Text style={styles.instructions}>Touch the squares to uncover mines. Long touch to flag the square.</Text>
         <View style={styles.board}>
-          <MineField board={this.state.board}/>
+          <MineField board={this.state.board} onOpenField={this.onOpenField} onFlag={this.onFlag} />
         </View>
       </View>
     );

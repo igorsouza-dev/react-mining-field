@@ -92,12 +92,17 @@ const isGameWon = board => fields(board).filter(isFieldIntact).length === 0;
 
 const showMines = board => fields(board).filter(field => field.mined).forEach(field => field.opened = true);
 
+const toggleFlag = (board, row, column) => {
+    const field = board[row][column];
+    field.flagged = !field.flagged;
+}
 
 export { 
     createMinedBoard,
     cloneBoard,
     openField,
-    hasExploed,
+    hasExploded,
     isGameWon,
-    showMines
+    showMines,
+    toggleFlag
 };
