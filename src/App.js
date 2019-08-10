@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Alert } from 'react-native';
 import params from './params';
 import MineField from './components/MineField';
+import Header from './components/Header';
+import LevelSelection from './screens/LevelSelection';
+
 import { 
   createMinedBoard,
   cloneBoard,
@@ -9,7 +12,8 @@ import {
   hasExploded,
   isGameWon,
   showMines,
-  toggleFlag
+  toggleFlag,
+  usedFlags
 } from './functions';
 
 export default class App extends Component {
@@ -21,7 +25,6 @@ export default class App extends Component {
     const rows = params.getRowsAmount();
     const columns = params.getColumnsAmount();
     const minesAmount = Math.ceil(rows * columns * params.difficultLevel);
-    // return createMinedBoard(rows, columns, minesAmount);
     return minesAmount;
   }
   createState = () => {
@@ -30,7 +33,8 @@ export default class App extends Component {
     return {
       board: createMinedBoard(rows, columns, this.getMinesAmount()),
       gameWon: false,
-      gameLost: false
+      gameLost: false,
+      showLevelSelection: false,
     }
   }
   onOpenField = (row, column) => {
@@ -61,13 +65,29 @@ export default class App extends Component {
 
     this.setState({ board, gameWon });
   }
+  onLevelSelected = level => {
+    params.difficultLevel = level;
+    this.setState(this.createState());
+  }
+  onFlagPress = () => {
+    this.setState({showLevelSelection: true});
+  }
+  closeLevelSelection = () => {
+    this.setState({showLevelSelection: false});
+  }
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to the game!</Text>
-        <Text style={styles.instructions}>Touch the squares to uncover mines. Long touch to flag the square.</Text>
+        <LevelSelection 
+          isVisible={this.state.showLevelSelection} 
+          onCancel={this.closeLevelSelection}
+          onLevelSelected={this.onLevelSelected}/>
+        <Header 
+          flagsLeft={this.getMinesAmount() - usedFlags(this.state.board)} 
+          onNewGamePress={() => this.setState(this.createState())}
+          onFlagPress={() => this.onFlagPress()} />
         <View style={styles.board}>
-          <MineField board={this.state.board} onOpenField={this.onOpenField} onFlag={this.onFlag} />
+          <MineField board={this.state.board} onOpenField={this.onOpenField} onFlag={this.onFlagPress} />
         </View>
       </View>
     );

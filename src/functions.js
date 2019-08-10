@@ -97,6 +97,8 @@ const toggleFlag = (board, row, column) => {
     field.flagged = !field.flagged;
 }
 
+const usedFlags = (board) => fields(board).filter((field) => field.flagged).length;
+
 export { 
     createMinedBoard,
     cloneBoard,
@@ -104,5 +106,6 @@ export {
     hasExploded,
     isGameWon,
     showMines,
-    toggleFlag
+    toggleFlag,
+    usedFlags,
 };
