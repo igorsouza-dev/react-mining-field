@@ -5,7 +5,7 @@ import MineField from './components/MineField';
 import Header from './components/Header';
 import LevelSelection from './screens/LevelSelection';
 
-import { 
+import {
   createMinedBoard,
   cloneBoard,
   openField,
@@ -58,7 +58,7 @@ export default class App extends Component {
     toggleFlag(board, row, column);
 
     const gameWon = isGameWon(board);
-    
+
     if (gameWon) {
       Alert.alert('Congratulations!', 'You won!');
     }
@@ -70,24 +70,24 @@ export default class App extends Component {
     this.setState(this.createState());
   }
   onFlagPress = () => {
-    this.setState({showLevelSelection: true});
+    this.setState({ showLevelSelection: true });
   }
   closeLevelSelection = () => {
-    this.setState({showLevelSelection: false});
+    this.setState({ showLevelSelection: false });
   }
   render() {
     return (
       <View style={styles.container}>
-        <LevelSelection 
-          isVisible={this.state.showLevelSelection} 
+        <LevelSelection
+          isVisible={this.state.showLevelSelection}
           onCancel={this.closeLevelSelection}
-          onLevelSelected={this.onLevelSelected}/>
-        <Header 
-          flagsLeft={this.getMinesAmount() - usedFlags(this.state.board)} 
+          onLevelSelected={this.onLevelSelected} />
+        <Header
+          flagsLeft={this.getMinesAmount() - usedFlags(this.state.board)}
           onNewGamePress={() => this.setState(this.createState())}
           onFlagPress={() => this.onFlagPress()} />
         <View style={styles.board}>
-          <MineField board={this.state.board} onOpenField={this.onOpenField} onFlag={this.onFlagPress} />
+          <MineField board={this.state.board} onOpenField={this.onOpenField} onFlag={this.onFlag} />
         </View>
       </View>
     );
